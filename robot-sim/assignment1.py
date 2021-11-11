@@ -94,7 +94,7 @@ def avoid_walls():
                 print("avoided wall")
             return
 	
-def go_to_target(dist, rot_y):
+def go_and_perform_action(dist, rot_y, action):
     """
     Function that makes the robot move toward the target
     Args: 
@@ -116,10 +116,10 @@ def go_to_target(dist, rot_y):
         drive(30, 0.1)
     # Else we arrived at target
     else :
-        print("reached target token")
-        grab_and_put_token_behind()
+        print("reached target token, performing action")
+        action()
 			
-def grab_and_put_token_behind():
+def put_token_behind():
 	"""
 	Function that makes the robot put the token behinf itself.
 	There is some wait time between the rotations to make
@@ -148,7 +148,7 @@ def main():
         # Robots goes to the target if any is found
         if target_dist != -1 and target_dist <= 1:
             print("going to target")
-            go_to_target(target_dist, target_rot_y)
+            go_and_perform_action(target_dist, target_rot_y, put_token_behind)
         else :
             print("going forward")
             drive(30, 0.3)
