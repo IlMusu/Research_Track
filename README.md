@@ -1,7 +1,7 @@
 # Assignment 1: Python Robotics Simulator
 
-This is a simple, portable robot simulator developed by [Student Robotics](https://studentrobotics.org).
-Some of the arenas and the exercises have been modified for the Research Track I course
+This is a simple, portable robot simulator developed by [Student Robotics](https://studentrobotics.org).</br>
+Some of the arenas and the exercises have been modified for the Research Track I course.
 
 ### Installing and running
 
@@ -13,12 +13,11 @@ $ python2 run.py assignment1.py
 ```
 
 ### Exercise
-The objective of this assignment is to control the robot to make it navigate the circuit in a counterclockwise orientation. The walls are made of gold tokens and the robot must be able to see and avoid them while not backing up. Besides this, there are also some silver tokens which the robot should grab and put behind.
+The objective of this assignment is to control the robot to make it navigate a circuit in a counterclockwise orientation. The walls are made of gold tokens and the robot must be able to see and avoid them while not backing up. Besides this, there are also some silver tokens which the robot should grab and put behind.
 
 In this assignment some function from the previous exercises are slightly modified and  used:
 - drive(speed, seconds): this function sets a linear velocity to the robot for the specified time.
 - turn(speed, seconds): this function sets an angular velocity to the robot for the specified time.
-- find_token(marker_type, half_vision_angle, start_angle): this functions filters all the token that the robot see with the specified parameters.
 
 The pseudocode is the following:
 
@@ -28,9 +27,18 @@ function "main()":
     2) call the function "avoid_walls()" to avoid the possibility of the robot crashing into gold tokens
     3) call the function "find_token()" to get the next visible silver token in front of the robot with a cone of vision of 200 degress
     4) if there is a silver token near enough:
-        5) call the function "go_and_perform_action()" to make the robot go near the token and then perform the action passed as asrgument which will be the function "put_token_behind()"
+        5) call the function "go_and_perform_action()" to make the robot go near the token and then perform the action "put_token_behind()"
     6) otherwise:
         7) call the function "drive()" to make the robot go forward a little bit
+```
+```
+function "go_and_perform_action(dist, rot_y, action)" :
+1) check if the arguments are valid, otherwise return
+2) if the absolute value of rot_y is not inside a threshold:
+    3) make the robot turn in order to make the robot face the target, hence, reduce the absolute value of rot_y
+4) otherwise, if dist is more than a threshould: 
+    5) make the robot go forward in order to reduce the distance from the target
+6) otherwise, the robot arrived at distination so it possibile to perform the action passed a argument
 ```
 ```
 function "grab_and_put_token_behind()":
