@@ -5,8 +5,7 @@ Some of the arenas and the exercises have been modified for the Research Track I
 
 ### Installing and running
 
-The simulator requires a Python 2.7 installation, the [pygame](http://pygame.org/) library, [PyPyBox2D](https://pypi.python.org/pypi/pypybox2d/2.1-r331), and [PyYAML](https://pypi.python.org/pypi/PyYAML/).</br>
-Once the dependencies are installed, the simulation can be started with the following command inside the "robot-sim" folder: 
+The simulator requires a Python 2.7 installation, the [pygame](http://pygame.org/) library, [PyPyBox2D](https://pypi.python.org/pypi/pypybox2d/2.1-r331), and [PyYAML](https://pypi.python.org/pypi/PyYAML/). Once the dependencies are installed, the simulation can be started with the following command inside the "robot-sim" folder: 
 
 ```bash
 $ python2 run.py assignment1.py
@@ -19,7 +18,8 @@ Some functions from previous exercises are slightly modified and used:
 - drive(speed, seconds): sets a linear velocity to the robot for the specified time.
 - turn(speed, seconds): sets an angular velocity to the robot for the specified time.
 
-The pseudocode used to solve the exercize is the following:
+### Algorithm pseudocode
+The pseudocode used to solve the exercise is the following:
 
 ```
 function "main()" :
@@ -38,7 +38,7 @@ function "go_and_perform_action(dist, rot_y, action)" :
     3) make the robot turn in order to make it face the target
 4) otherwise, if dist is more than a threshold: 
     5) make the robot go forward in order to reduce the distance from the target
-6) otherwise, the robot arrived at distination:
+6) otherwise, the robot arrived at destination:
     7)  perform the action passed a argument
 ```
 ```
@@ -58,9 +58,13 @@ function "avoid_walls()":
     5) check for a golden token in front of the robot by calling "find_token()" with a vision angle of 150 degrees.
     6) if there is a golden token in front of the robot:
         7) turn by the direction specified by turnDirection until there is no more a golden token in front
-        8) go forward a little bit to avoid entering a loop of rotating left and right continuosly
+        8) go forward a little bit to avoid entering a loop of rotating left and right continuously
     9) otherwise return
 ```
 
+### Algorithm explanation
+The idea behind the algorithm is the following: the robot can see in front of itself with an angle of vision of 150 degrees. If the robot detects a wall too much close (walls are make up of gold tokens), it needs to decide whether to turn right or left and how much to turn. To decide the direction of turning, the robot checks the distance of the walls on it's right and left side and decides to turn in the direction on which the distance is lower. It turns until it's vision in free of obstacles. </br>
+If, during the traveling, the robot detects a silver token near itself, the following routine takes place: the robot goes to the token and grabs it, rotates 180 degrees, releases the token and rotates 180 degrees again to return to the position it had before the beginning of the routine. The robot does not try to retake a just released silver token because it can only see silver tokens in front of it self.
+
 ### Future development
-The procedure used to make the robot turn works most of the times, but it may happen that the robot turns in the wrong direction and starts backing up instead of goind forward. This is currently solved by adjusting some parameters but a better solution would be to implement a more complex procedure for pathfinding.
+The procedure used to make the robot turn works most of the times, but it may happen that the robot turns in the wrong direction and starts backing up instead of going forward. This is currently solved by adjusting some parameters but a better solution would be to implement a more complex procedure for pathfinding.
