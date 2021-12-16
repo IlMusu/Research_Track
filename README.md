@@ -57,69 +57,80 @@ The objective of this assignment is create two nodes (robot\_controller and robo
 ### Algorithm pseudocode
 The pseudocode used to solve the exercise is the following.
 
-Inside the robot\_controller node:
+- Inside the robot\_controller node:
 ```
 function "main()" :
 1) initialize the node by calling the "ros::init" function.
-2) create a Subscriber to the topic "/base_scan" to receive informations about the surrounding environment of the robot. When new data is available, the function "onEnvinronmentScan" is called.
-3) create a Publisher to the topic "/cmd_vel" so that the robot can be moved by publishing a message containing a velocity.
-4) create a ServiceServer of the service "/speed_modifier" to receive commands abount changing the velocity of the robot. When new commands are available, the function "onSpeedModified" is called.
-5) call the function "ros::spin" to prevent the node from terminating the execution.
+2) create a Subscriber to the topic "/base_scan": the call back is "onEnvinronmentScan".
+3) create a Publisher to the topic "/cmd_vel".
+4) create a ServiceServer of the service "/speed_modifier": the callback is "onSpeedModified".
+5) call "ros::spin".
 ```
 ```
 function "onModifySpeed(req, res)" :
-1) the speed of the robot is updated by adding the value of req.speed_delta to it. If the resulting speed value is negative, it is set to 0.
-2) the new speed of the robot is returned to the sender setting the value of res.speed.
+1) compute speed += req.speed_delta.
+2) if speed < 0, set speed = 0.
+3) set res.speed=speed.
 ```
 ```
-function "onEnvinronmentScan(msg)" :
-1) the msg->ranges field contains 720 values, these are subdivided into scans, an array of 5 elements, by taking the minimum value of each subsection.
-2) the function "moveRobotInCircuit" is called by passing scans as argument.
+function "onEnvinronmentScan(ranges)" :
+1) compute valuesInSubsection=floor(ranges.size/5).
+2) create scans array of size 5.
+3) for i=0 to 4:
+    4) compute start = i*valuesInSubsection.
+    5) compute end = start+valuesInSubsection.
+    6) find the minimum value of ranges between start and end.
+    7) put the found minimum in scans[i].
+8) call "moveRobotInCircuit(scans)".
 ```
 ```
 function "moveRobotInCircuit(scans)" :
-1) if the current speed is <= 0, the robot should not be moved, so return.
-2) the linear speed is calculated by considering the distance in front of the robot: the speed should increase if the distance is increasing. The obtained value should be mapped between 0 and 1 and multiplied by the speed value.
-3) calculate some weights in the remaining four directions: the weight should increase if the distance is decreasing. The obtained weight is mapped between 0 and 2*angularSpeed.
-4) the angular speed is calculated as the sum of the weights: if the weight is on the left of the robot, it should be negative, otherwise it should be positive.
-5) call the function "applyVelocityToRobot" by passing the linear and angular values just computed.
+1) if speed is <= 0, return.
+2) compute linear: increases if scans[2] increases.
+3) map linear between 0 and speed.
+4) for each remaining direction i:
+    5) calculate weight_i: increases if scans[i] decreases.
+    6) map weight_i between 0 and 2*angularSpeed.
+7) compute angular = (sum weights i<0)-(sum weight i>0);
+8) call "applyVelocityToRobot(linear, angular)".
 ```
 
 ```
 function "applyVelocityToRobot(linear, angular)" :
 1) create a Twist message.
-2) set velocity.linear.x=linear and velocity.angular.z=angular.
-3) send the message.
+2) set velocity.linear.x=linear.
+3) set velocity.angular.z=angular.
+4) send the message to "/cmd_vel".
 ```
 
-Inside the robot\_controller node:
+- Inside the robot\_controller node:
 ```
 function "main()" :
 1) initialize the node by calling the "ros::init" function.
-2) create a ServiceClient for the service "/speed_modifier" to send informations about the desired change in the speed of the robot.
-3) create a ServiceClient for the service "/reset_positions" to reset the position of the robot.
+2) create a ServiceClient for the service "/speed_modifier".
+3) create a ServiceClient for the service "/reset_positions".
 4) execute these instruction in loop:
-    5) get a new command from the console by calling the function "getIntFromConsole".
+    5) get a new command by calling "getIntFromConsole".
     6) if command==4 terminate execution.
-    7) if command==1 call the function "resetRobotPosition".
-    8) if command==2 call the function "modifyRobotSpeed(0.5F)".
-    9) if command==3 call the function "modifyRobotSpeed(-0.5F)".
+    7) if command==1 call "resetRobotPosition".
+    8) if command==2 call "modifyRobotSpeed(0.5F)".
+    9) if command==3 call "modifyRobotSpeed(-0.5F)".
 ```
 ```
 function "resetRobotPosition()":
 1) create an Empty message.
-2) send it to the "/reset_positions" service.
+2) send the message to the "/reset_positions".
 ```
 ```
 function "modifyRobotSpeed(delta)":
-1) create an SpeedModifier message called modifier.
+1) create a SpeedModifier message called modifier.
 2) set modifier.request.speed_delta=delta.
-3) send the message.
+3) send the message to "/speed_modifier".
 ```
 ```
 function "getIntFromConsole(bound0, bound1)":
 1) execute these instruction in loop:
-    2) get a int from the console and call it value.
+    2) value=get a int from the console.
     3) if bound0 <= value <= bound1.
         4) return value.
 ```
