@@ -50,54 +50,78 @@ $ rosrun second_assignment robot_ui
 ```
 
 ### Exercise
-The objective of this assignment is to control the robot to make it navigate a circuit in a counterclockwise orientation. The walls are made of gold tokens and the robot must be able to see and avoid them while not backing up. Besides this, there are also some silver tokens inside the circuit which the robot should grab and put behind itself.
-
-Some functions from previous exercises are slightly modified and used:
-- drive(speed, seconds): sets a linear velocity to the robot for the specified time.
-- turn(speed, seconds): sets an angular velocity to the robot for the specified time.
+The objective of this assignment is create two nodes (robot\_controller and robot\_ui) to interract with ROS system to navigate a robot in the given circuit:</br>
+- the robot\_controller node is used to actually control the robot movements by using some informations about the laser scanners embedded inside the robot to make it proceed forward while avoiding walls.
+- the robot\_ui node is an interface that interacts with the user and makes him able to increase and descrease the robot speed and also reset the robot position.
 
 ### Algorithm pseudocode
-The pseudocode used to solve the exercise is the following:
+The pseudocode used to solve the exercise is the following.
 
+Inside the robot\_controller node:
 ```
 function "main()" :
-1) execute this instructions in a loop:
-    2) call "avoid_walls()" to avoid crashing the robot into the walls of gold tokens
-    3) call "find_token()" to get the next visible silver token in front of the robot
-    4) if there is a silver token near enough:
-        5) call "go_and_perform_action(target, put_token_behind)" to make the robot go near the silver token and then perform the action
-    6) otherwise:
-        7) call "drive()" to make the robot go forward a little bit
+1) initialize the node by calling the "ros::init" function.
+2) create a Subscriber to the topic "/base_scan" to receive informations about the surrounding environment of the robot. When new data is available, the function "onEnvinronmentScan" is called.
+3) create a Publisher to the topic "/cmd_vel" so that the robot can be moved by publishing a message containing a velocity.
+4) create a ServiceServer of the service "/speed_modifier" to receive commands abount changing the velocity of the robot. When new commands are available, the function "onSpeedModified" is called.
+5) call the function "ros::spin" to prevent the node from terminating the execution.
 ```
 ```
-function "go_and_perform_action(dist, rot_y, action)" :
-1) check if the arguments are valid, otherwise return
-2) if the absolute value of rot_y is not inside a threshold:
-    3) make the robot turn in order to make it face the target
-4) otherwise, if dist is more than a threshold: 
-    5) make the robot go forward in order to reduce the distance from the target
-6) otherwise, the robot arrived at destination:
-    7)  perform the action passed a argument
+function "onModifySpeed(req, res)" :
+1) the speed of the robot is updated by adding the value of req.speed_delta to it. If the resulting speed value is negative, it is set to 0.
+2) the new speed of the robot is returned to the sender setting the value of res.speed.
 ```
 ```
-function "grab_and_put_token_behind()":
-1) grab the token
-2) turn 180 degrees
-3) release the token
-4) move back a little bit to avoid colliding with the token when turning
-5) turn 180 degrees
+function "onEnvinronmentScan(msg)" :
+1) the msg->ranges field contains 720 values, these are subdivided into scans, an array of 5 elements, by taking the minimum value of each subsection.
+2) the function "moveRobotInCircuit" is called by passing scans as argument.
 ```
 ```
-function "avoid_walls()":
-1) find the distance to the nearest golden token on the right side by calling "find_token()" with a small angle of vision and a start angle of 90 degrees
-2) find the distance to the nearest golden token on the left side by calling "find_token()" with a small angle of vision and a start angle of -90 degrees
-3) compute the optimal direction turnDirection=1 if the left distance is more than the right distance, otherwise turnDirection=-1
-4) execute these instructions in a loop:
-    5) check for a golden token in front of the robot by calling "find_token()" with a vision angle of 150 degrees.
-    6) if there is a golden token in front of the robot:
-        7) turn by the direction specified by turnDirection until there is no more a golden token in front
-        8) go forward a little bit to avoid entering a loop of rotating left and right continuously
-    9) otherwise return
+function "moveRobotInCircuit(scans)" :
+1) if the current speed is <= 0, the robot should not be moved, so return.
+2) the linear speed is calculated by considering the distance in front of the robot: the speed should increase if the distance is increasing. The obtained value should be mapped between 0 and 1 and multiplied by the speed value.
+3) calculate some weights in the remaining four directions: the weight should increase if the distance is decreasing. The obtained weight is mapped between 0 and 2*angularSpeed.
+4) the angular speed is calculated as the sum of the weights: if the weight is on the left of the robot, it should be negative, otherwise it should be positive.
+5) call the function "applyVelocityToRobot" by passing the linear and angular values just computed.
+```
+
+```
+function "applyVelocityToRobot(linear, angular)" :
+1) create a Twist message.
+2) set velocity.linear.x=linear and velocity.angular.z=angular.
+3) send the message.
+```
+
+Inside the robot\_controller node:
+```
+function "main()" :
+1) initialize the node by calling the "ros::init" function.
+2) create a ServiceClient for the service "/speed_modifier" to send informations about the desired change in the speed of the robot.
+3) create a ServiceClient for the service "/reset_positions" to reset the position of the robot.
+4) execute these instruction in loop:
+    5) get a new command from the console by calling the function "getIntFromConsole".
+    6) if command==4 terminate execution.
+    7) if command==1 call the function "resetRobotPosition".
+    8) if command==2 call the function "modifyRobotSpeed(0.5F)".
+    9) if command==3 call the function "modifyRobotSpeed(-0.5F)".
+```
+```
+function "resetRobotPosition()":
+1) create an Empty message.
+2) send it to the "/reset_positions" service.
+```
+```
+function "modifyRobotSpeed(delta)":
+1) create an SpeedModifier message called modifier.
+2) set modifier.request.speed_delta=delta.
+3) send the message.
+```
+```
+function "getIntFromConsole(bound0, bound1)":
+1) execute these instruction in loop:
+    2) get a int from the console and call it value.
+    3) if bound0 <= value <= bound1.
+        4) return value.
 ```
 
 ### Algorithm explanation
