@@ -148,7 +148,7 @@ The rule used to make the robot move forward is the following one:<br>
 ```cpp
 float linear = fmin(fmax(0, scans[FRONT]-1), 1) * speed;
 ```
-It can be analized by considering small portions of it:
+It can be analyzed by considering small portions of it:
 ```cpp
 float a = fmax(0, scans[FRONT]-1);
 float b = fmin(fmax(0, scans[FRONT]-1), 1);
@@ -165,7 +165,7 @@ float wfleft =  fmax(0.0F, 2-scans[FLEFT])  * angularSpeed;
 float wfright = fmax(0.0F, 2-scans[FRIGHT]) * angularSpeed;
 float wright =  fmax(0.0F, 2-scans[RIGHT])  * angularSpeed;
 ```
-For example, if we consider scans\[RIGHT\], the value of 'wright' is the amount of turning that the robot should perform to avoid the obstacle on its right: the value increases if the distance from the obstancle on the right decreases.<br>
+For example, if we consider scans\[RIGHT\], the value of 'wright' is the amount of turning that the robot should perform to avoid the obstacle on its right: the value increases if the distance from the obstacle on the right decreases.<br>
 
 The rule used to make the robot rotate is to sum all the weights just calculated and considering that weights from directions on the left should be negative (to make the robot rotate to the right) and weights from directions on the right should be positive (to make the robot rotate on the left):<br>
 ```cpp
