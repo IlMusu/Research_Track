@@ -1,11 +1,11 @@
 # Assignment 2: Robot Operating System
 
-The Robot Operating System (ROS) is a set of software libraries and tools that help you build robot applications. From drivers to state-of-the-art algorithms, and with powerful developer tools, ROS has what you need for your next robotics project. And it's all open source.
+The Robot Operating System (ROS) is an open-source, meta-operating system for your robot. It provides the services you would expect from an operating system, including hardware abstraction, low-level device control, implementation of commonly-used functionality, message-passing between processes, and package management. It also provides tools and libraries for obtaining, building, writing, and running code across multiple computers.
 
 ### Installing and running
 
-The following code has been developed and tested with [ROS Noetic 1.15.13](http://wiki.ros.org/noetic/Installation).</br>
-Once this package has beed installed, it is necessary to create a ROS workspace:
+The ROS package contained in this repository has been developed and tested with [ROS Noetic 1.15.13](http://wiki.ros.org/noetic/Installation).</br>
+Once ROS has beed installed, it is necessary to create a ROS workspace:
 
 ```bash
 $ mkdir -p [workspace_name]/src
@@ -15,23 +15,22 @@ $ catkin_make
 
 A folder called "second_assignment" must be created inside the "src" folder.</br>
 The files contained in this repository must be placed inside the folder just created.</br>
-Now it is necessary to rebuild the package by returning to the workspace folder and executing:
+Now, it is necessary to rebuild the package by returning to the workspace folder and executing:
 
 ```bash
 $ catkin_make
 ```
 
-It is necessary to source the setup file by adding the following line to the .bashrc file.
-NB. The file must be added at the end of the file.
-
-```
-source [workspace_folder]/devel/setup.bash
-```
-
-The .bashrc file can be opened with the following command:
+Remember that the .bashrc file can be opened with the following command:
 
 ```bash
 $ gedit ~/.bashrc
+```
+
+The setup file of the workspace must be sourced by adding the following line at the end of the .bashrc file.
+
+```
+source [workspace_folder]/devel/setup.bash
 ```
 
 Finally, it is possibile to run the simulation.</br>
