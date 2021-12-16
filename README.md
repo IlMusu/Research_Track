@@ -55,15 +55,13 @@ The objective of this assignment is create two nodes (robot\_controller and robo
 - the robot\_ui node is an interface that interacts with the user and makes him able to increase and descrease the robot speed and also reset the robot position.
 
 ### Algorithm pseudocode
-The pseudocode used to solve the exercise is the following.
-
-- Inside the robot\_controller node:
+- The robot\_controller node pseudocode is:
 ```
 function "main()" :
 1) initialize the node by calling the "ros::init" function.
-2) create a Subscriber to the topic "/base_scan": the call back is "onEnvinronmentScan".
-3) create a Publisher to the topic "/cmd_vel".
-4) create a ServiceServer of the service "/speed_modifier": the callback is "onSpeedModified".
+2) create a Subscriber to the topic "/base_scan": the callback is "onEnvinronmentScan".
+3) create a ServiceServer of the service "/speed_modifier": the callback is "onSpeedModified".
+4) create a Publisher to the topic "/cmd_vel".
 5) call "ros::spin".
 ```
 ```
@@ -102,8 +100,7 @@ function "applyVelocityToRobot(linear, angular)" :
 3) set velocity.angular.z=angular.
 4) send the message to "/cmd_vel".
 ```
-
-- Inside the robot\_controller node:
+- The robot\_ui node pseudocode is:
 ```
 function "main()" :
 1) initialize the node by calling the "ros::init" function.
@@ -136,8 +133,4 @@ function "getIntFromConsole(bound0, bound1)":
 ```
 
 ### Algorithm explanation
-The idea behind the algorithm is the following: the robot can see in front of itself with an angle of vision of 150 degrees. If the robot detects a wall too much close (walls are make up of gold tokens), it needs to decide whether to turn right or left and how much to turn. To decide the direction of turning, the robot checks the distance of the walls on it's right and left side and decides to turn in the direction on which the distance is lower. It turns until it's vision in free of obstacles. </br>
-If, during the traveling, the robot detects a silver token near itself, the following routine takes place: the robot goes to the token and grabs it, rotates 180 degrees, releases the token and rotates 180 degrees again to return to the position it had before the beginning of the routine. The robot does not try to retake a just released silver token because it can only see silver tokens in front of it self.
 
-### Future development
-The procedure used to make the robot turn works most of the times, but it may happen that the robot turns in the wrong direction and starts backing up instead of going forward. This is currently solved by adjusting some parameters but a better solution would be to implement a more complex procedure for pathfinding.
