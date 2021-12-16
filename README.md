@@ -114,18 +114,18 @@ function "main()" :
     9) if command==3 call "modifyRobotSpeed(-0.5F)".
 ```
 ```
-function "resetRobotPosition()":
+function "resetRobotPosition()" :
 1) create an Empty message.
 2) send the message to the "/reset_positions".
 ```
 ```
-function "modifyRobotSpeed(delta)":
+function "modifyRobotSpeed(delta)" :
 1) create a SpeedModifier message called modifier.
 2) set modifier.request.speed_delta=delta.
 3) send the message to "/speed_modifier".
 ```
 ```
-function "getIntFromConsole(bound0, bound1)":
+function "getIntFromConsole(bound0, bound1)" :
 1) execute these instruction in loop:
     2) value=get a int from the console.
     3) if bound0 <= value <= bound1.
