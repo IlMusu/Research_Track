@@ -59,41 +59,60 @@ The objective of this assignment is create a ROS nodes (here called _robot\_ui_)
 
 ### Algorithm pseudocode
 - The _robot\_ui_ node pseudocode is:
-
+```
+function "main()" :
+1) initialize the node by calling "rospy.init_node()"
+2) do the following operations in a loop:
+    3) print the operation modes
+    4) read the operation mode from console
+    5) if mode == 1 call "set_specific_goal()"
+    6) if mode == 2 call "cancel_specific_goal()"
+    7) if mode == 3 call "drive_manually(False)"
+    8) if mode == 4 call "drive_manually(True)"
+    9) if mode == 5 exit loop
+    10) else mode is invalid, print error
+```
 ```
 function "set_specific_goal()" :
-1) read target position (x, y) from console
+1) read target position from console
 2) create a goal with the target position
-3) send the goal to the move_base ActionServer
+3) send the goal to the move_base action server
 
 function "cancel_specific_goal()" :
-1) if the move_base ActionServer does not have a goal:
+1) if the move_base action server does not have a goal:
     2) return
-3) cancel the goal from the move_base ActionServer 
+3) cancel the goal from the move_base action server 
 ```
 ```
 function "drive_manually(assistance)" :
-1) cancel all goals from the move_base ActionServer
+1) cancel all goals from the move_base action server
 2) if assistance :
-    3) create a subscriber for cmd_vel_override: the callback is on_manual_velocity
-    4) create a subscriber for scan: the callback is on_laser_scan
-    5) run teleop_twist_keyboard and override the cmd_vel topic
-    6) unsubscribe from the cmd_vel_override topic
-    7) unsubscribe from the scan topic
+    3) create subscriber for "/cmd_vel_override" : callback is "on_manual_velocity"
+    4) create subscriber for "/scan" : callback is "on_laser_scan"
+    5) run teleop_twist_keyboard and override the "/cmd_vel" topic
+    6) unsubscribe from the "/cmd_vel_override" topic
+    7) unsubscribe from the "/scan" topic
 8) else :
     9) run teleop_twist_keyboard
 10) reset robot velocity
 ```
-
-<code>
-function <b>main()</b> :
-1) initialize the node by calling <b>rospy.init_node()</b>:
-2) do the following in a loop:
-    3) print the operation modes
-    4) read the operation mode from console
-    6) if mode == 1 call <b>set_specific_goal()</b>
-    5) call a function depending on the mode
-</code>
+```
+function "on_manual_velocity(velocity)" :
+1) desired_velocity = velocity
+```
+```
+function "on_laser_scan(scans)" :
+1) divide the scans.ranges array into 3 subsections
+2) find the minimum of each subsection
+3) put clear_directions[subsection] = (min for subsection > threshold)
+4) if desired_velocity.linear.x > 0 and clear_directions[1] is false:
+    5) desired_velocity.linear.x = 0
+6) if desired_velocity.angular.z > 0 and clear_directions[2] is false:
+    7) desired_velocity.angular.z = 0
+8) if desired_velocity.angular.z < 0 and clear_directions[0] is false:
+    9) desired_velocity.angular.z = 0
+10) publish desired_velocity to the "/cmd_vel" topic
+```
 
 ### Algorithm explanation
 
