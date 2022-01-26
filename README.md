@@ -47,7 +47,11 @@ The following commands must be executed in different terminals:
 
 ```bash
 $ roslaunch final_assignment simulation_gmapping.launch
+```
+```bash
 $ roslaunch final_assignment move_base.launch
+```
+```bash
 $ rosrun final_assignment robot_ui.py
 ```
 
