@@ -59,15 +59,15 @@ The objective of this assignment is create a ROS nodes (here called _robot\_ui_)
 
 ### Algorithm pseudocode
 - The _robot\_ui_ node pseudocode is:
-```
-function "main()" :
-1) initialize the node by calling "rospy.initnode(...)"
-2) do the following operations in a loop:
+<code>
+function <b>main()</b> :
+1) initialize the node by calling <b>rospy.init_node()</b>:
+2) do the following in a loop:
     3) print the operation modes
     4) read the operation mode from console
-    6) if mode is invalid, print error and continue
+    6) if mode == 1 call <b>set_specific_goal()</b>
     5) call a function depending on the mode
-```
+</code>
 ```
 function "set_specific_goal()" :
 1) read target position (x, y) from console
