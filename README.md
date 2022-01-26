@@ -59,15 +59,6 @@ The objective of this assignment is create a ROS nodes (here called _robot\_ui_)
 
 ### Algorithm pseudocode
 - The _robot\_ui_ node pseudocode is:
-<code>
-function <b>main()</b> :<br>
-1) initialize the node by calling <b>rospy.init_node()</b>:
-2) do the following in a loop:
-    3) print the operation modes
-    4) read the operation mode from console
-    6) if mode == 1 call <b>set_specific_goal()</b>
-    5) call a function depending on the mode
-</code>
 
 ```
 function "set_specific_goal()" :
@@ -79,7 +70,8 @@ function "cancel_specific_goal()" :
 1) if the move_base ActionServer does not have a goal:
     2) return
 3) cancel the goal from the move_base ActionServer 
-
+```
+```
 function "drive_manually(assistance)" :
 1) cancel all goals from the move_base ActionServer
 2) if assistance :
@@ -92,6 +84,16 @@ function "drive_manually(assistance)" :
     9) run teleop_twist_keyboard
 10) reset robot velocity
 ```
+
+<code>
+function <b>main()</b> :
+1) initialize the node by calling <b>rospy.init_node()</b>:
+2) do the following in a loop:
+    3) print the operation modes
+    4) read the operation mode from console
+    6) if mode == 1 call <b>set_specific_goal()</b>
+    5) call a function depending on the mode
+</code>
 
 ### Algorithm explanation
 
