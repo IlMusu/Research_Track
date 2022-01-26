@@ -35,7 +35,7 @@ NB. The .bashrc file can be opened with the following command:
 $ gedit ~/.bashrc
 ```
 
-The setup.bash file must be sourced so that ROS can find the workspace.<br>s
+The setup.bash file must be sourced so that ROS can find the workspace.<br>
 To do this, the following line must be added at the end of the .bashrc file:
 
 ```
