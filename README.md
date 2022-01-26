@@ -93,11 +93,11 @@ function "drive_manually(assistance)" :
 10) reset robot velocity
 ```
 
-</code> 
+<code> 
 prova prova
 1. ciao amico
 <b>hello</b>
-<code>
+</code>
 
 ### Algorithm explanation
 
