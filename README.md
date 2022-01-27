@@ -1,7 +1,9 @@
 # Assignment 3: ROS, Gazebo And Rviz
 
 The Robot Operating System (ROS) is an open-source, meta-operating system for your robot. It provides the services you would expect from an operating system, including hardware abstraction, low-level device control, implementation of commonly-used functionality, message-passing between processes, and package management. It also provides tools and libraries for obtaining, building, writing, and running code across multiple computers.
-The full installation of ROS contains also Gazebo which is the most common 3-dimensional physical simulator used in robotics and Rviz which is a visualization widget for the simulation: together, these two tools allow the user to simulate a specific robot in a specific environment but also to view the simulated robot and environment, analyze log and replay sensor information.
+The full installation of ROS contains also Gazebo which is the most common 3-dimensional physical simulator used in robotics and Rviz which is a visualization widget for the simulation: together, these two tools allow the user to simulate a specific robot in a specific environment but also to view the simulated robot and environment, analyse log and replay sensor information.
+
+In this assignment, the model of the robot is more realistic regarding the onboard sensors: an odometry based only on these sensors would accumulate errors and therefore produce a complete wrong position after a while. This is why it is necessary that the odometry is based on more reliable techniques such as SLAM algorithms: the implementation that is used in this assignment is called GMapping.
 
 ### Installing and running
 
@@ -9,16 +11,15 @@ The ROS package contained in this repository has been developed and tested with 
 Once ROS has been installed, it is necessary to create a ROS workspace:
 
 ```bash
-$ mkdir -p [workspace_name]/src
-$ cd [workspace_name]/
-$ catkin_make
+mkdir -p [workspace_name]/src
+cd [workspace_name]/
+catkin_make
 ```
 
 Then, a folder called "final_assignment" needs to be created inside the "src" folder.</br>
 The files contained in this repository need to be placed inside the just created folder.</br>
 
 Then, the package contained in the following repository needs to be added to the workspace.</br>
-This package provides a laser-based SLAM (Simultaneous Localization and Mapping) algorithm. </br>
 ```
 https://github.com/CarmineD8/slam_gmapping
 ```
@@ -26,33 +27,33 @@ https://github.com/CarmineD8/slam_gmapping
 Now, it is necessary to rebuild the package by moving to the workspace folder and executing:
 
 ```bash
-$ catkin_make
+catkin_make
 ```
 
 NB. The .bashrc file can be opened with the following command:
 
 ```bash
-$ gedit ~/.bashrc
+gedit ~/.bashrc
 ```
 
-The setup.bash file must be sourced so that ROS can find the workspace.<br>
-To do this, the following line must be added at the end of the .bashrc file:
+The setup.bash file needs to be sourced so that ROS can find the workspace.<br>
+To do this, the following line needs be added at the end of the .bashrc file:
 
 ```
 source [workspace_folder]/devel/setup.bash
 ```
 
 Finally, it is possible to run the simulation.</br>
-The following commands must be executed in different terminals:
+The following commands need be executed in different terminals:
 
 ```bash
-$ roslaunch final_assignment simulation_gmapping.launch
+roslaunch final_assignment simulation_gmapping.launch
 ```
 ```bash
-$ roslaunch final_assignment move_base.launch
+roslaunch final_assignment move_base.launch
 ```
 ```bash
-$ rosrun final_assignment robot_ui.py
+rosrun final_assignment robot_ui.py
 ```
 
 ### Exercise
