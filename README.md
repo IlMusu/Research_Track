@@ -8,9 +8,9 @@ The ROS package contained in this repository has been developed and tested with 
 Once ROS has been installed, it is necessary to create a ROS workspace:
 
 ```bash
-$ mkdir -p [workspace_name]/src
-$ cd [workspace_name]/
-$ catkin_make
+mkdir -p [workspace_name]/src
+cd [workspace_name]/
+catkin_make
 ```
 
 Then, a folder called "second_assignment" need to be created inside the "src" folder.</br>
@@ -18,13 +18,13 @@ The files contained in this repository need to be placed inside the just created
 Now, it is necessary to rebuild the package by moving to the workspace folder and executing:
 
 ```bash
-$ catkin_make
+catkin_make
 ```
 
 NB. The .bashrc file can be opened with the following command:
 
 ```bash
-$ gedit ~/.bashrc
+gedit ~/.bashrc
 ```
 
 The setup.bash file must be sourced so that ROS can find the workspace.<br>s
@@ -38,16 +38,16 @@ Finally, it is possible to run the simulation.</br>
 The following commands must be executed in different terminals:
 
 ```bash
-$ roscore
+roscore
 ```
 ```bash
-$ rosrun stage_ros stageros $(rospack find second_assignment)/world/my_world.world
+rosrun stage_ros stageros $(rospack find second_assignment)/world/my_world.world
 ```
 ```bash
-$ rosrun second_assignment robot_controller
+rosrun second_assignment robot_controller
 ```
 ```bash
-$ rosrun second_assignment robot_ui
+rosrun second_assignment robot_ui
 ```
 
 ### Exercise
