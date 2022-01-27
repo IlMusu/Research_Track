@@ -127,6 +127,7 @@ function "on_laser_scan(scans)" :
 It is important to distinguish the following two base cases:
 - The algorithm uses the move\_base node to make the robot move.
 - The algorithm uses the teleop\_twist\_keyboard node to make the robot move.
+<br>
 That is because these two operation modes can conflict with each other: if the user want to manually move the robot while a goal is set on the move\_base action server, it happens that both move\_base and teleop\_twist\_keyboard send messages to the "/cmd\_vel" topic which may contain complete different velocities.</br>
 </br>
 It is also important to further explain how the implementation of the "collision avoidance" algorithm works: the commands of the user that make the robot move are transposed into the velocity message that is sent by the teleop\_twist\_keyboard node to the "/cmd\_vel" topic. It is necessary to intercept this message and store the velocity into a variable which is here called desired\_velocity.</br>
