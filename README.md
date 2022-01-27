@@ -128,7 +128,7 @@ It is important to distinguish the following two base cases:
 - The algorithm uses the move\_base node to make the robot move.
 - The algorithm uses the teleop\_twist\_keyboard node to make the robot move.
 
-That is because these two operation modes can conflict with each other: if the user want to manually move the robot while a goal is set on the move\_base action server, it happens that both move\_base and teleop\_twist\_keyboard send messages to the "/cmd\_vel" topic which may contain complete different velocities.</br>
+That is because these two operation modes can conflict with each other: if the user wants to manually move the robot while a goal is set on the move\_base action server, it happens that both move\_base and teleop\_twist\_keyboard send messages to the "/cmd\_vel" topic which may contain complete different velocities.</br>
 </br>
 It is also important to further explain how the implementation of the "collision avoidance" algorithm works: the commands of the user that make the robot move are transposed into the velocity message that is sent by the teleop\_twist\_keyboard node to the "/cmd\_vel" topic. It is necessary to intercept this message and store the velocity into a variable which is here called desired\_velocity.</br>
 After a new laser scan of the environment, it is possible to check if the desired\_velocity would cause a collision with the environment and correct the desired\_velocity values so that the collision does not happen. Only at this moment the desired\_velocity message is sent to the "/cmd_vel" topic to make the robot actually move.
