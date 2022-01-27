@@ -1,8 +1,8 @@
 # Assignment 3: ROS, Gazebo And Rviz
 
-The Robot Operating System (ROS) is an open-source, meta-operating system for your robot. It provides the services you would expect from an operating system, including hardware abstraction, low-level device control, implementation of commonly-used functionality, message-passing between processes, and package management. It also provides tools and libraries for obtaining, building, writing, and running code across multiple computers.<br>
-The full installation of ROS contains also Gazebo which is the most common 3-dimensional physical simulator used in robotics and Rviz which is a visualization widget for the simulation: together, these two tools allow the user to simulate a specific robot in a specific environment but also to view the simulated robot and environment, analyse log and replay sensor information.<br>
-<br>
+The Robot Operating System (ROS) is an open-source, meta-operating system for your robot. It provides the services you would expect from an operating system, including hardware abstraction, low-level device control, implementation of commonly-used functionality, message-passing between processes, and package management. It also provides tools and libraries for obtaining, building, writing, and running code across multiple computers.</br>
+The full installation of ROS contains also Gazebo which is the most common 3-dimensional physical simulator used in robotics and Rviz which is a visualization widget for the simulation: together, these two tools allow the user to simulate a specific robot in a specific environment but also to view the simulated robot and environment, analyse log and replay sensor information.</br>
+</br>
 In this assignment, the model of the robot is more realistic regarding the onboard sensors: an odometry based only on these sensors would accumulate errors and therefore produce a complete wrong position after a while. This is why it is necessary that the odometry is based on more reliable techniques such as SLAM algorithms: the implementation that is used in this assignment is called GMapping.
 
 ### Installing and running
@@ -18,12 +18,9 @@ catkin_make
 
 Then, a folder called "final_assignment" needs to be created inside the "src" folder.</br>
 The files contained in this repository need to be placed inside the just created folder.</br>
-
-Then, the package contained in the following repository needs to be added to the workspace.</br>
-```
-https://github.com/CarmineD8/slam_gmapping
-```
-
+</br>
+Then, the package contained in this [repository](https://github.com/CarmineD8/slam_gmapping) needs to be added to the workspace: it contains the implementation of the GMapping algorithm.</br>
+</br>
 Now, it is necessary to rebuild the package by moving to the workspace folder and executing:
 
 ```bash
