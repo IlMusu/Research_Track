@@ -57,8 +57,8 @@ function "avoid_walls()":
 4) execute these instructions in a loop:
     5) check for a wall in front of the robot by calling "find_token(MARKER_TOKEN_GOLD, 75)"
     6) if there is a wall in front of the robot:
-        7) turn by the direction specified by turnDirection until there is no more a wall in front
-        8) go forward a little bit to avoid entering a loop of rotating left and right continuously
+        7) turn with direction of turnDirection until there is no more a wall in front
+        8) go forward a bit to avoid entering a loop of rotating left and right continuously
     9) otherwise return
 ```
 
