@@ -8,7 +8,7 @@ Some of the arenas and the exercises have been modified for the Research Track I
 The simulator requires a Python 2.7 installation, the [pygame](http://pygame.org/) library, [PyPyBox2D](https://pypi.python.org/pypi/pypybox2d/2.1-r331), and [PyYAML](https://pypi.python.org/pypi/PyYAML/). Once the dependencies are installed, the simulation can be started with the following command inside the "robot-sim" folder: 
 
 ```bash
-$ python2 run.py assignment1.py
+python2 run.py assignment1.py
 ```
 
 ### Exercise
@@ -24,10 +24,10 @@ The pseudocode used to solve the exercise is the following:
 ```
 function "main()" :
 1) execute this instructions in a loop:
-    2) call "avoid_walls()" to avoid crashing the robot into the walls of gold tokens
+    2) call "avoid_walls()" to avoid crashing the robot into a wall of gold tokens
     3) call "find_token()" to get the next visible silver token in front of the robot
     4) if there is a silver token near enough:
-        5) call "go_and_perform_action(target, put_token_behind)" to make the robot go near the silver token and then perform the action
+        5) call "go_and_perform_action(target, put_token_behind)"
     6) otherwise:
         7) call "drive()" to make the robot go forward a little bit
 ```
@@ -51,13 +51,13 @@ function "grab_and_put_token_behind()":
 ```
 ```
 function "avoid_walls()":
-1) find the distance to the nearest golden token on the right side by calling "find_token()" with a small angle of vision and a start angle of 90 degrees
-2) find the distance to the nearest golden token on the left side by calling "find_token()" with a small angle of vision and a start angle of -90 degrees
-3) compute the optimal direction turnDirection=1 if the left distance is more than the right distance, otherwise turnDirection=-1
+1) find the distance from wall on the right by calling "find_token(MARKER_TOKEN_GOLD, 10, 90)"
+2) find the distance from wall on the left by calling "find_token(MARKER_TOKEN_GOLD, 10, -90)"
+3) turnDirection = left distance is more than the right distance ? 1 : -1
 4) execute these instructions in a loop:
-    5) check for a golden token in front of the robot by calling "find_token()" with a vision angle of 150 degrees.
-    6) if there is a golden token in front of the robot:
-        7) turn by the direction specified by turnDirection until there is no more a golden token in front
+    5) check for a wall in front of the robot by calling "find_token(MARKER_TOKEN_GOLD, 75)"
+    6) if there is a wall in front of the robot:
+        7) turn by the direction specified by turnDirection until there is no more a wall in front
         8) go forward a little bit to avoid entering a loop of rotating left and right continuously
     9) otherwise return
 ```
