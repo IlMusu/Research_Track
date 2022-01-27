@@ -8,7 +8,7 @@ In this assignment, the model of the robot is more realistic regarding the onboa
 ### Installing and running
 
 The ROS package contained in this repository has been developed and tested with [ROS Noetic 1.15.13](http://wiki.ros.org/noetic/Installation).</br>
-Once ROS has been installed, it is necessary to install the navigation stack with the following command (depending on the ROS distro that has been installed on the system):
+Once ROS has been installed on the system, it is necessary to install the navigation stack with the following command (depending on the ROS distribution that has been installed on the system):
 
 ```bash
 apt-get install ros-<ros_distro>-navigation
@@ -25,7 +25,7 @@ catkin_make
 Then, a folder called "final_assignment" needs to be created inside the "src" folder.</br>
 The files contained in this repository need to be placed inside the just created folder.</br>
 </br>
-Then, the package contained in this [repository](https://github.com/CarmineD8/slam_gmapping) needs to be added to the workspace: it contains the GMapping algorithm that is used to generate the odometry of the robot. It may be necessary to switch to the the correct branch depending on the ROS distro that in installed on the system.</br>
+Then, the package contained in this [repository](https://github.com/CarmineD8/slam_gmapping) needs to be added to the workspace: it contains the GMapping algorithm that is used to generate the odometry of the robot. It may be necessary to switch to the the correct branch depending on the ROS distribution that has been installed on the system.</br>
 </br>
 Now, it is necessary to rebuild the package by moving to the workspace folder and executing:
 
@@ -64,7 +64,7 @@ The objective of this assignment is create a ROS node (here called _robot\_ui_) 
 1. Let the robot reach autonomously a target coordinate inserted by the user.
 2. Let the user drive manually the robot without assistance.
 3. Let the user drive manually the robot with collision avoidance.
-NB. To implement the 2 and 3 
+NB. To implement the operation modes (2) and (3) it is possible to use the _teleop\_twist_keyboard_ node that has been automatically installed with the navigation stack.
 
 ### Algorithm pseudocode
 - The _robot\_ui_ node pseudocode is:
@@ -94,7 +94,7 @@ function "cancel_specific_goal()" :
 ```
 ```
 function "drive_manually(assistance)" :
-1) cancel all goals from the move_base action server
+1) cancel existing goal from the move_base action server
 2) if assistance :
     3) create subscriber for "/cmd_vel_override" : callback is "on_manual_velocity"
     4) create subscriber for "/scan" : callback is "on_laser_scan"
@@ -124,4 +124,10 @@ function "on_laser_scan(scans)" :
 ```
 
 ### Algorithm explanation
-
+It is important to distinguish the following two base cases:
+- The algorithm uses the move\_base node to make the robot move.
+- The algorithm uses the teleop\_twist\_keyboard node to make the robot move.
+That is because these two operation modes can conflict with each other: if the user want to manually move the robot while a goal is set on the move\_base action server, it happens that both move\_base and teleop\_twist\_keyboard send messages to the "/cmd\_vel" topic which may contain complete different velocities.</br>
+</br>
+It is also important to further explain how the implementation of the "collision avoidance" algorithm works: the commands of the user that make the robot move are transposed into the velocity message that is sent by the teleop\_twist\_keyboard node to the "/cmd\_vel" topic. It is necessary to intercept this message and store the velocity into a variable which is here called desired\_velocity.</br>
+After a new laser scan of the environment, it is possible to check if the desired\_velocity would cause a collision with the environment and correct the desired\_velocity values so that the collision does not happen. Only at this moment the desired\_velocity message is sent to the "/cmd_vel" topic to make the robot actually move.
