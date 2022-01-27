@@ -25,7 +25,7 @@ catkin_make
 Then, a folder called "final_assignment" needs to be created inside the "src" folder.</br>
 The files contained in this repository need to be placed inside the just created folder.</br>
 </br>
-Then, the package contained in this [repository](https://github.com/CarmineD8/slam_gmapping) needs to be added to the workspace: it contains the GMapping algorithm. It may be necessary to switch to the the correct branch depending on the ROS distro that in installed on the system.</br>
+Then, the package contained in this [repository](https://github.com/CarmineD8/slam_gmapping) needs to be added to the workspace: it contains the GMapping algorithm that is used to generate the odometry of the robot. It may be necessary to switch to the the correct branch depending on the ROS distro that in installed on the system.</br>
 </br>
 Now, it is necessary to rebuild the package by moving to the workspace folder and executing:
 
