@@ -8,7 +8,13 @@ In this assignment, the model of the robot is more realistic regarding the onboa
 ### Installing and running
 
 The ROS package contained in this repository has been developed and tested with [ROS Noetic 1.15.13](http://wiki.ros.org/noetic/Installation).</br>
-Once ROS has been installed, it is necessary to create a ROS workspace:
+Once ROS has been installed, it is necessary to install the navigation stack with the following command (depending on the ROS distro that has been installed on the system):
+
+```bash
+apt-get install ros-<ros_distro>-navigation
+```
+
+Then, it is necessary to create a ROS workspace:
 
 ```bash
 mkdir -p [workspace_name]/src
@@ -19,7 +25,7 @@ catkin_make
 Then, a folder called "final_assignment" needs to be created inside the "src" folder.</br>
 The files contained in this repository need to be placed inside the just created folder.</br>
 </br>
-Then, the package contained in this [repository](https://github.com/CarmineD8/slam_gmapping) needs to be added to the workspace: it contains the implementation of the GMapping algorithm.</br>
+Then, the package contained in this [repository](https://github.com/CarmineD8/slam_gmapping) needs to be added to the workspace: it contains the GMapping algorithm. It may be necessary to switch to the the correct branch depending on the ROS distro that in installed on the system.</br>
 </br>
 Now, it is necessary to rebuild the package by moving to the workspace folder and executing:
 
@@ -54,10 +60,11 @@ rosrun final_assignment robot_ui.py
 ```
 
 ### Exercise
-The objective of this assignment is create a ROS nodes (here called _robot\_ui_) to interact with the ROS system to navigate a robot in the given environment with the following operation modes:</br>
-1. Let the robot reach autonomously a target coordinate inserted by the user
-2. Let the user drive manually the robot without assistance
-3. Let the user drive manually the robot with collision avoidance
+The objective of this assignment is create a ROS node (here called _robot\_ui_) to interact with the ROS system to navigate a robot in the given environment. The node should let the user choose one of the following operation modes:</br>
+1. Let the robot reach autonomously a target coordinate inserted by the user.
+2. Let the user drive manually the robot without assistance.
+3. Let the user drive manually the robot with collision avoidance.
+NB. To implement the 2 and 3 
 
 ### Algorithm pseudocode
 - The _robot\_ui_ node pseudocode is:
