@@ -60,7 +60,7 @@ def set_specific_goal():
     goal.target_pose.pose.position.x = x
     goal.target_pose.pose.position.y = y
     
-    # Comunicating the action to the server
+    # Communicating the action to the server
     client.send_goal(goal)
     print("Setted a new target.") 
     
@@ -75,7 +75,7 @@ def cancel_specific_goal() :
     print("Cleared target.")        
     
 def drive_manually(assistance) :
-    # Canceling all goals to be sure move_base is stopped
+    # Cancelling all goals to be sure move_base is stopped
     client.cancel_all_goals()
         
     if assistance :
@@ -83,6 +83,9 @@ def drive_manually(assistance) :
         sub1 = rospy.Subscriber("cmd_vel_override", Twist, on_manual_velocity)
         sub2 = rospy.Subscriber("scan", LaserScan, on_laser_scan)
         # Running teleop_twist_keyboard node to manually control robot
+        # The default topic is overridden using a parameter: this could have also been done by 
+        # creating a launch file and using the <remap> tag. Using the parameter makes it possible 
+        # to have the desired behaviour without creating another file.
         os.system("rosrun teleop_twist_keyboard teleop_twist_keyboard.py cmd_vel:=cmd_vel_override")
         # Unsubscribing from the topics
         sub1.unregister()
@@ -101,7 +104,7 @@ def on_manual_velocity(velocity) :
     
 def on_laser_scan(scans) :
     # Dividing the scans into 3 directions: LEFT, FRONT, RIGHT
-    # Checking if the minumin distance is more that 0.5
+    # Checking if the minimum distance is more that 0.5
     clear_directions = [
         min(scans.ranges[  0:287]) > 0.5,
         min(scans.ranges[288:431]) > 0.5,
@@ -119,5 +122,7 @@ def on_laser_scan(scans) :
     # Publishing corrected velocity
     vel_pub.publish(desired_velocity)
     
+
 if __name__ == '__main__':
     main()
+    
