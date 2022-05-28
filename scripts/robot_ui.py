@@ -38,7 +38,7 @@ client = None
 vel_pub = None
 """A publisher to the /cmd_vel topic to move the robot"""
 
-desired_velocity = Twist()
+desired_velocity = None
 """The velocity that needs to be checked when checking collision avoidance"""
 
 def controller():
@@ -63,10 +63,12 @@ def main():
     """
     global client
     global vel_pub
+    global velocity
     
     rospy.init_node("robot_ui")
     client = actionlib.SimpleActionClient("move_base", MoveBaseAction)
     vel_pub = rospy.Publisher("cmd_vel", Twist, queue_size=10)
+    velocity = Twist()
 
     while 1:
         print("Choose one of the following commands:")
