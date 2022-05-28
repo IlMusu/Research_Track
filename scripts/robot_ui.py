@@ -61,7 +61,7 @@ def set_specific_goal():
     goal.target_pose.pose.position.y = y
     
     # Communicating the action to the server
-    client.send_goal(goal)
+    client.send_goal(goal) 
     print("Setted a new target.") 
     
 def cancel_specific_goal() :
@@ -108,7 +108,7 @@ def on_laser_scan(scans) :
     clear_directions = [
         min(scans.ranges[  0:287]) > 0.5,
         min(scans.ranges[288:431]) > 0.5,
-        min(scans.ranges[432:713]) > 0.5,
+        min(scans.ranges[432:720]) > 0.5,
     ]
     
     # Check if the next movement would cause a collision and prevent it
