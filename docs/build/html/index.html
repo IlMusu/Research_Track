@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to RobotUI’s documentation! &mdash; RobotUI 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="#" class="icon icon-home"> RobotUI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Welcome to RobotUI’s documentation!</a></li>
+<li><a class="reference internal" href="#indices">Indices</a></li>
+<li><a class="reference internal" href="#module-scripts.robot_ui">User Interface Module</a></li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">RobotUI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+      <li>Welcome to RobotUI’s documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="welcome-to-robotui-s-documentation">
+<h1>Welcome to RobotUI’s documentation!<a class="headerlink" href="#welcome-to-robotui-s-documentation" title="Permalink to this headline"></a></h1>
+<p>This is the documentation for the RobotUI module.</p>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="indices">
+<h1>Indices<a class="headerlink" href="#indices" title="Permalink to this headline"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Indice</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="module-scripts.robot_ui">
+<span id="user-interface-module"></span><h1>User Interface Module<a class="headerlink" href="#module-scripts.robot_ui" title="Permalink to this headline"></a></h1>
+<span class="target" id="module-robot_ui"></span><p>This ROS node is a User Interface which interacts with the ROS system to
+navigate a robot in the given environment. The node should let the user
+choose one of the following operation modes:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Let the robot reach autonomously a target coordinate inserted by the user.</p></li>
+<li><p>Let the user drive manually the robot without assistance.</p></li>
+<li><p>Let the user drive manually the robot with collision avoidance.</p></li>
+</ol>
+</div></blockquote>
+<dl class="simple">
+<dt>Subscribes to:</dt><dd><p>/cmd_vel_override
+/scan</p>
+</dd>
+<dt>Publishes to:</dt><dd><p>/cmd_vel</p>
+</dd>
+<dt>Sends goals to:</dt><dd><p>/move_base</p>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.robot_ui.cancel_specific_goal">
+<span class="sig-prename descclassname"><span class="pre">scripts.robot_ui.</span></span><span class="sig-name descname"><span class="pre">cancel_specific_goal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/robot_ui.html#cancel_specific_goal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.robot_ui.cancel_specific_goal" title="Permalink to this definition"></a></dt>
+<dd><div class="line-block">
+<div class="line">This method cancels the current goal from the ‘move_base’ server.</div>
+<div class="line">If the server does not currenly have any goal, the user is notified.</div>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="scripts.robot_ui.client">
+<span class="sig-prename descclassname"><span class="pre">scripts.robot_ui.</span></span><span class="sig-name descname"><span class="pre">client</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#scripts.robot_ui.client" title="Permalink to this definition"></a></dt>
+<dd><p>An ActionClient used to send commands to the move_base ActionServer</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.robot_ui.controller">
+<span class="sig-prename descclassname"><span class="pre">scripts.robot_ui.</span></span><span class="sig-name descname"><span class="pre">controller</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/robot_ui.html#controller"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.robot_ui.controller" title="Permalink to this definition"></a></dt>
+<dd><p>”
+This function initializes the ROS node and waits for the user to
+insert <em>start</em> or <em>stop</em> to control the robot, by relying on the
+<a class="reference external" href="http://wiki.ros.org/rospy/">rospy</a> module.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="scripts.robot_ui.desired_velocity">
+<span class="sig-prename descclassname"><span class="pre">scripts.robot_ui.</span></span><span class="sig-name descname"><span class="pre">desired_velocity</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">linear:</span>&#160;&#160;&#160; <span class="pre">x:</span> <span class="pre">0.0</span>&#160;&#160; <span class="pre">y:</span> <span class="pre">0.0</span>&#160;&#160; <span class="pre">z:</span> <span class="pre">0.0</span> <span class="pre">angular:</span>&#160;&#160;&#160; <span class="pre">x:</span> <span class="pre">0.0</span>&#160;&#160; <span class="pre">y:</span> <span class="pre">0.0</span>&#160;&#160; <span class="pre">z:</span> <span class="pre">0.0</span></em><a class="headerlink" href="#scripts.robot_ui.desired_velocity" title="Permalink to this definition"></a></dt>
+<dd><p>The velocity that needs to be checked when checking collision avoidance</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.robot_ui.drive_manually">
+<span class="sig-prename descclassname"><span class="pre">scripts.robot_ui.</span></span><span class="sig-name descname"><span class="pre">drive_manually</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assistance</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/robot_ui.html#drive_manually"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.robot_ui.drive_manually" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>assistance</strong> – a boolean which enables or disables the assistance logic.</p>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line">This method enables the user to drive the robot manually.</div>
+<div class="line">It also enables collision avoidance assistance if requested:</div>
+<div class="line">1. The Twist message is intercepted with a callback.</div>
+<div class="line">2. Requests the scanner data with a subscriber.</div>
+<div class="line">NB. The ‘teleop_twist_keyboard’ is used to actually drive the robot.</div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.robot_ui.main">
+<span class="sig-prename descclassname"><span class="pre">scripts.robot_ui.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/robot_ui.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.robot_ui.main" title="Permalink to this definition"></a></dt>
+<dd><div class="line-block">
+<div class="line">This method initializes the ROS node with name ‘robot_ui’.</div>
+<div class="line">And then asks the user to choose one of the possible actions:</div>
+<div class="line-block">
+<div class="line">1. Drive autonomously to a specific target.</div>
+<div class="line">2. Stop driving to specified target.</div>
+<div class="line">3. Drive manually without assistance.</div>
+<div class="line">4. Drive manually with collision avoidance.</div>
+<div class="line">5. Quit.</div>
+</div>
+<div class="line">If the requested action is valid, it starts to execute it.</div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.robot_ui.on_laser_scan">
+<span class="sig-prename descclassname"><span class="pre">scripts.robot_ui.</span></span><span class="sig-name descname"><span class="pre">on_laser_scan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scans</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/robot_ui.html#on_laser_scan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.robot_ui.on_laser_scan" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scans</strong> – a LaserScan message that contains the scanned data.</p>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line">A callback that is called when new data from the robot laser scanner is available.</div>
+<div class="line">It divides the into 3 directions: LEFT, FRONT, RIGHT.</div>
+<div class="line">For each direction, checks if the requested velocity would cause a collision and</div>
+<div class="line">prevents it by zeroing the correct component in the velocity.</div>
+<div class="line">Sends the corrected velocity to the ‘move_base’ action server.</div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.robot_ui.on_manual_velocity">
+<span class="sig-prename descclassname"><span class="pre">scripts.robot_ui.</span></span><span class="sig-name descname"><span class="pre">on_manual_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">velocity</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/robot_ui.html#on_manual_velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.robot_ui.on_manual_velocity" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>velocity</strong> – a Twist message that contains the new velocity.</p>
+</dd>
+</dl>
+<p>This is a method that lays between ‘teleop_twist_keyboard’ node and ‘move_base’:
+when the collision avoidance assistance is requested, the Twist message sent
+by the ‘teleop_twist_keyboard’ is intercepted and stored to be used later when
+new data from the robot scanner is available.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.robot_ui.set_specific_goal">
+<span class="sig-prename descclassname"><span class="pre">scripts.robot_ui.</span></span><span class="sig-name descname"><span class="pre">set_specific_goal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/robot_ui.html#set_specific_goal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.robot_ui.set_specific_goal" title="Permalink to this definition"></a></dt>
+<dd><div class="line-block">
+<div class="line">This method prompts the user to set a target position (x, y).</div>
+<div class="line">It will then use the position to set a new goal on the ‘move_base’ server.</div>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="scripts.robot_ui.vel_pub">
+<span class="sig-prename descclassname"><span class="pre">scripts.robot_ui.</span></span><span class="sig-name descname"><span class="pre">vel_pub</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#scripts.robot_ui.vel_pub" title="Permalink to this definition"></a></dt>
+<dd><p>A publisher to the /cmd_vel topic to move the robot</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Mattia Musumeci.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
