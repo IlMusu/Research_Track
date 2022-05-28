@@ -63,7 +63,7 @@ rosrun final_assignment robot_ui.py
 The objective of this assignment is create a ROS node (here called _robot\_ui_) to interact with the ROS system to navigate a robot in the given environment. The node should let the user choose one of the following operation modes:</br>
 1. Let the robot reach autonomously a target coordinate inserted by the user.
 2. Let the user drive manually the robot without assistance.
-3. Let the user drive manually the robot with collision avoidance.</br>
+3. Let the user drive manually the robot with collision avoidance.
 
 NB. To implement the operation modes (2) and (3) it is possible to use the _teleop\_twist_keyboard_ node that has been automatically installed with the navigation stack.
 
