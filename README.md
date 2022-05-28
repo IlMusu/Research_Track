@@ -66,11 +66,12 @@ Inside the folder of this repository, run the following command:
 ```bash
 jupyter notebook
 ```
-And open the file called "RobotControllerUI".
+And open the file called "RobotControllerUI".<br>
+NB. This notebook also contains some graphs of some parameters and statistics regarding the robot performance in scanning the environmnet and reaching targets.
 
 # PART 3 : Statistics
-The third part of this assignment is to perform a statistical analysis on the [first assignment](https://github.com/IlMusu/Research_Track/tree/assignment_1/), considering two different implementations and testing which one performs better in the circuit given, when silver tokens are randomized in position and in number.<br>
-As performace evaluators, the average time required to finish the circuit has been considered.<br>
+The third part of this assignment is to perform a statistical analysis on the [first assignment](https://github.com/IlMusu/Research_Track/tree/assignment_1/), considering two different implementations and testing which one performs better in the circuit given, when silver tokens are randomized in position and in number (but always inside the circuit).<br>
+As performace evaluators, the **average time required to finish the circuit** has been considered.<br>
 NB. The simulation has been run 30 times for each implementaion.<br>
 
 Before starting to collect the data, it is necessary to formulate the hypotesis:
@@ -80,6 +81,16 @@ H0 : the average velocity of robot1 is the same as the average velocity of robot
 H1 : the average velocity of robot1 is different than the average velocity of robot2.
 ```
 In this context:
-- H0 is the **null hypothesis** becase we are comparing robot1 with robot2 and we are supposing that they are equally good.
-- H1 is the **alternative hypothesis** becase we are comparing robot1 with robot2 and we are supposing that one them is superior to the other.
-- The **confidence level** implies that H0 will be rejected when the sampling result has a less than 5% (in our case) of probability of occurring if H0 is true.
+- The term H0 is the **null hypothesis** because when comparing robot1 with robot2 it is supposed that they are equally good.
+- The term H1 is the **alternative hypothesis** beecause when comparing robot1 with robot2 it is supposed that one them is superior to the other.
+- The **confidence level of 5%** implies that H0 will be rejected when the sampling result has a less than 5% (in our case) of probability of occurring if H0 is true.
+
+Given the fact that there there are only 30 samples for each robot and that we are considering two robots, the statiscs that has been used to evalute the performances of the robots is the **two sample t-test**.<br>
+
+## Running
+Inside the folder of this repository, run the following command:
+```bash
+jupyter notebook
+```
+And open the file called "StatisticalAnalysis".<br>
+The last output of the notebook contains the result of the statistical analysis.
