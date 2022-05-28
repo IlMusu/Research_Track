@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scripts.robot_ui &mdash; RobotUI 1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> RobotUI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">RobotUI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>scripts.robot_ui</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scripts.robot_ui</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: robot_ui</span>
+<span class="sd">    :platform: Unix</span>
+<span class="sd">    :synopsis: User Interface to control a robot.</span>
+<span class="sd">.. moduleauthor:: Carmine Recchiuto carmine.recchiuto@dibris.unige.it</span>
+
+<span class="sd">This ROS node is a User Interface which interacts with the ROS system to </span>
+<span class="sd">navigate a robot in the given environment. The node should let the user </span>
+<span class="sd">choose one of the following operation modes:\n</span>
+<span class="sd"> 1. Let the robot reach autonomously a target coordinate inserted by the user.\n</span>
+<span class="sd"> 2. Let the user drive manually the robot without assistance.\n</span>
+<span class="sd"> 3. Let the user drive manually the robot with collision avoidance.</span>
+
+<span class="sd">Subscribes to:</span>
+<span class="sd">    /cmd_vel_override</span>
+<span class="sd">    /scan</span>
+<span class="sd">    </span>
+<span class="sd">Publishes to:</span>
+<span class="sd">    /cmd_vel</span>
+<span class="sd">    </span>
+<span class="sd">Sends goals to:</span>
+<span class="sd">    /move_base</span>
+<span class="sd">    </span>
+<span class="sd">&quot;&quot;&quot;</span>
+    
+<span class="kn">import</span> <span class="nn">rospy</span>
+<span class="kn">import</span> <span class="nn">actionlib</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">actionlib_msgs.msg</span> <span class="kn">import</span> <span class="n">GoalStatus</span>
+<span class="kn">from</span> <span class="nn">move_base_msgs.msg</span> <span class="kn">import</span> <span class="n">MoveBaseAction</span><span class="p">,</span> <span class="n">MoveBaseGoal</span>
+<span class="kn">from</span> <span class="nn">geometry_msgs.msg</span> <span class="kn">import</span> <span class="n">Twist</span>
+<span class="kn">from</span> <span class="nn">sensor_msgs.msg</span> <span class="kn">import</span> <span class="n">LaserScan</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="sd">&quot;&quot;&quot;An ActionClient used to send commands to the move_base ActionServer&quot;&quot;&quot;</span>
+
+<span class="n">vel_pub</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="sd">&quot;&quot;&quot;A publisher to the /cmd_vel topic to move the robot&quot;&quot;&quot;</span>
+
+<span class="n">desired_velocity</span> <span class="o">=</span> <span class="n">Twist</span><span class="p">()</span>
+<span class="sd">&quot;&quot;&quot;The velocity that needs to be checked when checking collision avoidance&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="controller"><a class="viewcode-back" href="../../index.html#scripts.robot_ui.controller">[docs]</a><span class="k">def</span> <span class="nf">controller</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">    This function initializes the ROS node and waits for the user to</span>
+<span class="sd">    insert *start* or *stop* to control the robot, by relying on the</span>
+<span class="sd">    `rospy &lt;http://wiki.ros.org/rospy/&gt;`_ module.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;doing something&quot;</span><span class="p">)</span></div>
+    
+    
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../index.html#scripts.robot_ui.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    |  This method initializes the ROS node with name &#39;robot_ui&#39;.</span>
+<span class="sd">    |  And then asks the user to choose one of the possible actions:</span>
+<span class="sd">    |   1. Drive autonomously to a specific target.</span>
+<span class="sd">    |   2. Stop driving to specified target.</span>
+<span class="sd">    |   3. Drive manually without assistance.</span>
+<span class="sd">    |   4. Drive manually with collision avoidance.</span>
+<span class="sd">    |   5. Quit.</span>
+<span class="sd">    |  If the requested action is valid, it starts to execute it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">client</span>
+    <span class="k">global</span> <span class="n">vel_pub</span>
+    
+    <span class="n">rospy</span><span class="o">.</span><span class="n">init_node</span><span class="p">(</span><span class="s2">&quot;robot_ui&quot;</span><span class="p">)</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">actionlib</span><span class="o">.</span><span class="n">SimpleActionClient</span><span class="p">(</span><span class="s2">&quot;move_base&quot;</span><span class="p">,</span> <span class="n">MoveBaseAction</span><span class="p">)</span>
+    <span class="n">vel_pub</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Publisher</span><span class="p">(</span><span class="s2">&quot;cmd_vel&quot;</span><span class="p">,</span> <span class="n">Twist</span><span class="p">,</span> <span class="n">queue_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Choose one of the following commands:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;1. Drive autonomously to a specific target.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;2. Stop driving to specified target.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;3. Drive manually without assistance.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;4. Drive manually with collision avoidance.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;5. Quit.&quot;</span><span class="p">)</span>
+        
+        <span class="n">mode</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
+            
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;1&quot;</span> <span class="p">:</span>
+            <span class="n">set_specific_goal</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;2&quot;</span> <span class="p">:</span>
+            <span class="n">cancel_specific_goal</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;3&quot;</span> <span class="p">:</span>
+            <span class="n">drive_manually</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;4&quot;</span> <span class="p">:</span>
+            <span class="n">drive_manually</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;5&quot;</span> <span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid operation mode.&quot;</span><span class="p">)</span>
+            
+        <span class="nb">print</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="set_specific_goal"><a class="viewcode-back" href="../../index.html#scripts.robot_ui.set_specific_goal">[docs]</a><span class="k">def</span> <span class="nf">set_specific_goal</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    |  This method prompts the user to set a target position (x, y).</span>
+<span class="sd">    |  It will then use the position to set a new goal on the &#39;move_base&#39; server.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Getting the target position from the user</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Insert x position: &quot;</span><span class="p">))</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Insert y position: &quot;</span><span class="p">))</span>
+    
+    <span class="c1"># Waiting until server exists</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">wait_for_server</span><span class="p">()</span>
+    
+    <span class="c1"># Creating the action containing the target position</span>
+    <span class="n">goal</span> <span class="o">=</span> <span class="n">MoveBaseGoal</span><span class="p">()</span>
+    <span class="n">goal</span><span class="o">.</span><span class="n">target_pose</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">frame_id</span> <span class="o">=</span> <span class="s2">&quot;map&quot;</span>
+    <span class="n">goal</span><span class="o">.</span><span class="n">target_pose</span><span class="o">.</span><span class="n">pose</span><span class="o">.</span><span class="n">orientation</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">goal</span><span class="o">.</span><span class="n">target_pose</span><span class="o">.</span><span class="n">pose</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+    <span class="n">goal</span><span class="o">.</span><span class="n">target_pose</span><span class="o">.</span><span class="n">pose</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+    
+    <span class="c1"># Communicating the action to the server</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">send_goal</span><span class="p">(</span><span class="n">goal</span><span class="p">)</span> 
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Setted a new target.&quot;</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="cancel_specific_goal"><a class="viewcode-back" href="../../index.html#scripts.robot_ui.cancel_specific_goal">[docs]</a><span class="k">def</span> <span class="nf">cancel_specific_goal</span><span class="p">()</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    |  This method cancels the current goal from the &#39;move_base&#39; server.</span>
+<span class="sd">    |  If the server does not currenly have any goal, the user is notified.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Checking if a target has previously been set</span>
+    <span class="k">if</span> <span class="n">client</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="o">==</span> <span class="n">GoalStatus</span><span class="o">.</span><span class="n">LOST</span> <span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No target is currently set.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+    
+    <span class="c1"># Removing previously set target</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">cancel_goal</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cleared target.&quot;</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="drive_manually"><a class="viewcode-back" href="../../index.html#scripts.robot_ui.drive_manually">[docs]</a><span class="k">def</span> <span class="nf">drive_manually</span><span class="p">(</span><span class="n">assistance</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Args:</span>
+<span class="sd">        assistance: a boolean which enables or disables the assistance logic.</span>
+<span class="sd">        </span>
+<span class="sd">    |  This method enables the user to drive the robot manually.</span>
+<span class="sd">    |  It also enables collision avoidance assistance if requested:</span>
+<span class="sd">    |  1. The Twist message is intercepted with a callback.</span>
+<span class="sd">    |  2. Requests the scanner data with a subscriber.</span>
+<span class="sd">    |  NB. The &#39;teleop_twist_keyboard&#39; is used to actually drive the robot.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Cancelling all goals to be sure move_base is stopped</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">cancel_all_goals</span><span class="p">()</span>
+        
+    <span class="k">if</span> <span class="n">assistance</span> <span class="p">:</span>
+        <span class="c1"># Subscribing to the necessary topics for assisting robot movements</span>
+        <span class="n">sub1</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Subscriber</span><span class="p">(</span><span class="s2">&quot;cmd_vel_override&quot;</span><span class="p">,</span> <span class="n">Twist</span><span class="p">,</span> <span class="n">on_manual_velocity</span><span class="p">)</span>
+        <span class="n">sub2</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Subscriber</span><span class="p">(</span><span class="s2">&quot;scan&quot;</span><span class="p">,</span> <span class="n">LaserScan</span><span class="p">,</span> <span class="n">on_laser_scan</span><span class="p">)</span>
+        <span class="c1"># Running teleop_twist_keyboard node to manually control robot</span>
+        <span class="c1"># The default topic is overridden using a parameter: this could have also been done by </span>
+        <span class="c1"># creating a launch file and using the &lt;remap&gt; tag. Using the parameter makes it possible </span>
+        <span class="c1"># to have the desired behaviour without creating another file.</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;rosrun teleop_twist_keyboard teleop_twist_keyboard.py cmd_vel:=cmd_vel_override&quot;</span><span class="p">)</span>
+        <span class="c1"># Unsubscribing from the topics</span>
+        <span class="n">sub1</span><span class="o">.</span><span class="n">unregister</span><span class="p">()</span>
+        <span class="n">sub2</span><span class="o">.</span><span class="n">unregister</span><span class="p">()</span>
+    <span class="k">else</span> <span class="p">:</span>
+        <span class="c1"># Running teleop_twist_keyboard node to manually control robot</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;rosrun teleop_twist_keyboard teleop_twist_keyboard.py cmd_vel:=cmd_vel&quot;</span><span class="p">)</span>
+        
+    <span class="c1"># Clearing robot movement</span>
+    <span class="n">vel_pub</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">Twist</span><span class="p">())</span></div>
+    
+<div class="viewcode-block" id="on_manual_velocity"><a class="viewcode-back" href="../../index.html#scripts.robot_ui.on_manual_velocity">[docs]</a><span class="k">def</span> <span class="nf">on_manual_velocity</span><span class="p">(</span><span class="n">velocity</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Args:</span>
+<span class="sd">        velocity : a Twist message that contains the new velocity.</span>
+<span class="sd">        </span>
+<span class="sd">    This is a method that lays between &#39;teleop_twist_keyboard&#39; node and &#39;move_base&#39;: </span>
+<span class="sd">    when the collision avoidance assistance is requested, the Twist message sent</span>
+<span class="sd">    by the &#39;teleop_twist_keyboard&#39; is intercepted and stored to be used later when</span>
+<span class="sd">    new data from the robot scanner is available.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">desired_velocity</span>
+    <span class="n">desired_velocity</span> <span class="o">=</span> <span class="n">velocity</span></div>
+    
+<div class="viewcode-block" id="on_laser_scan"><a class="viewcode-back" href="../../index.html#scripts.robot_ui.on_laser_scan">[docs]</a><span class="k">def</span> <span class="nf">on_laser_scan</span><span class="p">(</span><span class="n">scans</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Args:</span>
+<span class="sd">        scans : a LaserScan message that contains the scanned data.</span>
+<span class="sd">        </span>
+<span class="sd">    |  A callback that is called when new data from the robot laser scanner is available.</span>
+<span class="sd">    |  It divides the into 3 directions: LEFT, FRONT, RIGHT.</span>
+<span class="sd">    |  For each direction, checks if the requested velocity would cause a collision and</span>
+<span class="sd">    |  prevents it by zeroing the correct component in the velocity.</span>
+<span class="sd">    |  Sends the corrected velocity to the &#39;move_base&#39; action server.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># Dividing the scans into 3 directions: LEFT, FRONT, RIGHT</span>
+    <span class="c1"># Checking if the minimum distance is more that 0.5</span>
+    <span class="n">clear_directions</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="nb">min</span><span class="p">(</span><span class="n">scans</span><span class="o">.</span><span class="n">ranges</span><span class="p">[</span>  <span class="mi">0</span><span class="p">:</span><span class="mi">287</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="nb">min</span><span class="p">(</span><span class="n">scans</span><span class="o">.</span><span class="n">ranges</span><span class="p">[</span><span class="mi">288</span><span class="p">:</span><span class="mi">431</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="nb">min</span><span class="p">(</span><span class="n">scans</span><span class="o">.</span><span class="n">ranges</span><span class="p">[</span><span class="mi">432</span><span class="p">:</span><span class="mi">720</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="p">]</span>
+    
+    <span class="c1"># Check if the next movement would cause a collision and prevent it</span>
+    <span class="k">if</span> <span class="n">desired_velocity</span><span class="o">.</span><span class="n">linear</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">clear_directions</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">:</span>
+        <span class="n">desired_velocity</span><span class="o">.</span><span class="n">linear</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">desired_velocity</span><span class="o">.</span><span class="n">angular</span><span class="o">.</span><span class="n">z</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">clear_directions</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">:</span>
+        <span class="n">desired_velocity</span><span class="o">.</span><span class="n">angular</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">desired_velocity</span><span class="o">.</span><span class="n">angular</span><span class="o">.</span><span class="n">z</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">clear_directions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:</span>
+        <span class="n">desired_velocity</span><span class="o">.</span><span class="n">angular</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="c1"># Publishing corrected velocity</span>
+    <span class="n">vel_pub</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">desired_velocity</span><span class="p">)</span></div>
+    
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Mattia Musumeci.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
