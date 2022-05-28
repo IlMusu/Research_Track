@@ -1,13 +1,15 @@
-# PART 1
+# PART 1 : Software Documentation
 The first part of this assignment is to create the documentation for the [ROS node created in the third assignment](https://github.com/IlMusu/Research_Track/tree/assignment_3/scripts).</br>
 Given the fact that "robot_ui" was written in Python, the software used to create the documentation is Sphinx.
 
+### Install
 To install Sphinx, run the following command:
 
 ```bash
 sudo apt-get install python3-sphinx
 ```
 
+### Usage
 The steps that have been followed to create the documentation are:
 1. Move to the main directory of the "robot_ui" node.
 2. Create a directory called ["/sphinx"](https://github.com/IlMusu/Research_Track/tree/assignment_3/sphinx/) and inside of it run the command:<br>
@@ -32,3 +34,36 @@ make html
 ```
 
 The documentation is available [here](https://ilmusu.github.io/Research_Track/).
+
+# PART 2 : Jupyter Notebook
+The second part of this assignment is to use the Jupyter Notebook functionalities to create a graphical interface for the simulation used in the third assignment.<br>
+NB. This interface should have the exaclty same funcionalities of the robot_ui node implemented in third assignment.<br>
+
+### Install
+To install Jupyter Notebook, use the following commands:
+```bash
+pip3 install jupyter bqplot pyyaml ipywidgets
+jupyter nbextension enable --py widgetsnbextension
+```
+
+Some extensions are needed, use the following commands:
+```bash
+pip3 install jupyter_contrib_nbextensions
+pip3 install jupyter_nbextensions_configurator
+jupyter contrib nbextension install
+```
+
+Now, it is possible to use the interface to control the robot in the simulation.
+First, download this package [package](https://github.com/IlMusu/Research_Track/tree/assignment_3/).
+Then, it is possible to run the simulation using the following commands:
+```bash
+roslaunch final_assignment simulation_gmapping.launch
+roslaunch final_assignment move_base.launch
+```
+
+Now, it is possible to open Jupyter Notebook to visualized the interface.
+Inside the folder of this repository, run the following command:
+```bash
+jupyter notebook
+```
+
