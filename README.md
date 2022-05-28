@@ -9,7 +9,7 @@ sudo apt-get install python3-sphinx
 
 The steps that have been followed to create the documentation are:
 1. Move to the main directory of the "robot_ui" node.
-2. Create a directory called ["sphinx"](https://github.com/IlMusu/Research_Track/tree/assignment_3/sphinx/) and inside of it run the command:<br>
+2. Create a directory called ["/sphinx"](https://github.com/IlMusu/Research_Track/tree/assignment_3/sphinx/) and inside of it run the command:<br>
 NB. This will start an interactive prompt that will ask the user fo the required informations.
 ```bash
 sphinx-quistart
@@ -18,3 +18,9 @@ sphinx-quistart
 (OPTIONAL) Some extensions may be added to customize Sphinx.
 
 4. Modify the ["index.rst"](https://github.com/IlMusu/Research_Track/blob/assignment_3/sphinx/source/index.rst) file by adding the scripts for which we want to provide the documentation.
+
+Finally, it is possible to create the documentation by running the following command:<br>
+NB. This will create the documentation inside the "build" folder to be viwed as a browser page.
+```bash
+make html
+```
