@@ -76,16 +76,16 @@ NB. The simulation has been run 30 times for each implementaion.<br>
 
 Before starting to collect the data, it is necessary to formulate the hypotesis:
 ```
-With a confidence level of 5%, the hypothesis I formulate are the following:
+With a confidence level of 5%, I formulate the following hypothesis:
 H0 : the average velocity of robot1 is the same as the average velocity of robot2.
 H1 : the average velocity of robot1 is different than the average velocity of robot2.
 ```
 In this context:
-- The term H0 is the **null hypothesis** because when comparing robot1 with robot2 it is supposed that they are equally good.
-- The term H1 is the **alternative hypothesis** beecause when comparing robot1 with robot2 it is supposed that one them is superior to the other.
+- The term H0 is called the **null hypothesis** because when comparing robot1 with robot2 it is supposed that they are equally good.
+- The term H1 is called the **alternative hypothesis** because when comparing robot1 with robot2 it is supposed that one them is superior to the other.
 - The **confidence level of 5%** implies that H0 will be rejected when the sampling result has a less than 5% (in our case) of probability of occurring if H0 is true.
 
-Given the fact that there there are only 30 samples for each robot and that we are considering two robots, the statiscs that has been used to evalute the performances of the robots is the **two sample t-test**.<br>
+Given the fact that there there are only 30 samples for each robot and that we are considering two robots, the statiscs that has been used to evalute the performance of the robots is the **two sample t-test**.<br>
 
 ## Running
 Inside the folder of this repository, run the following command:
