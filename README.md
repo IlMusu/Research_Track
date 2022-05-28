@@ -20,6 +20,7 @@ sphinx-quistart
 4. Modify the ["index.rst"](https://github.com/IlMusu/Research_Track/blob/assignment_3/sphinx/source/index.rst) file by adding the scripts for which we want to provide the documentation.
 
 5. Properly comment the [robot_ui.py](https://github.com/IlMusu/Research_Track/blob/assignment_3/scripts/robot_ui.py) node.
+<br>
 Finally, it is possible to create the documentation by running the following command:<br>
 NB. This will create the documentation inside the "build" folder to be viwed as a browser page.
 ```bash
