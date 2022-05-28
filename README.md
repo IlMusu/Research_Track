@@ -6,7 +6,7 @@ The full installation of ROS contains also Gazebo which is the most common 3-dim
 In this assignment, the model of the robot is more realistic regarding the onboard sensors: an odometry based only on these sensors would accumulate errors and therefore produce a complete wrong position after a while. This is why it is necessary that the odometry is based on more reliable techniques such as SLAM algorithms: the implementation that is used in this assignment is called GMapping.
 
 ### Documentation
-The documentation of this projected can be found at the following [link](https://ilmusu.github.io/Research_Track_1/).
+The documentation of this projected can be found at the following [link](https://ilmusu.github.io/Research_Track/).
 ### Installing and running
 
 The ROS package contained in this repository has been developed and tested with [ROS Noetic 1.15.13](http://wiki.ros.org/noetic/Installation).</br>
