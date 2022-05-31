@@ -77,15 +77,16 @@ NB. The simulation has been run 30 times for each implementaion.<br>
 Before starting to collect the data, it is necessary to formulate the hypotesis:
 ```
 With a confidence level of 5%, I formulate the following hypothesis:
-H0 : the average velocity of robot1 is the same as the average velocity of robot2.
-H1 : the average velocity of robot1 is different than the average velocity of robot2.
+H0 : the mean time of Robot1 is the same as the mean time of Robot2.
+HA : the mean time of Robot1 is more than the mean time of Robot2.
 ```
 In this context:
-- The term H0 is called the **null hypothesis** because when comparing robot1 with robot2 it is supposed that they are equally good.
-- The term H1 is called the **alternative hypothesis** because when comparing robot1 with robot2 it is supposed that one them is superior to the other.
+- The term H0 is called the **null hypothesis** because when comparing Robot1 with Robot2 it is supposed that they are equally good.
+- The term HA is called the **alternative hypothesis** because when comparing robot1 with robot2 it is supposed that one them is superior to the other.
 - The **confidence level of 5%** implies that H0 will be rejected when the sampling result has a less than 5% (in our case) of probability of occurring if H0 is true.
 
-Given the fact that there there are only 30 samples for each robot and that we are considering two robots, the statiscs that has been used to evalute the performance of the robots is the **two sample t-test**.<br>
+Given the fact that there there are only 30 samples for each robot and that we are considering two robots, the statiscs that has been used to evalute the performance of the robots is the **Two Sample T-Test**.<br>
+Given the fact that the alternative hypothesis HA has been formulated as one of the two means being superior to the other, we have need to consider only the tail on the right of the t-test. At the end, the statistics that need to be used is the **One-Tailed Two Sample T-Test**.
 
 ## Running
 Inside the folder of this repository, run the following command:
