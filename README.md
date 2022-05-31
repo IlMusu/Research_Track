@@ -1,6 +1,6 @@
 # PART 1 : Software Documentation
 The first part of this assignment is to create the documentation for the [ROS node created in the third assignment](https://github.com/IlMusu/Research_Track/tree/assignment_3/scripts).</br>
-Given the fact that "robot_ui" was implemented in Python, the software used to create the documentation is Sphinx.
+Given the fact that "robot_ui" was implemented in Python, the software used to create the documentation is [Sphinx](https://www.sphinx-doc.org/en/master/).
 
 ### Installing
 To install Sphinx, run the following command:
@@ -19,7 +19,7 @@ NB. This will start an interactive prompt that will ask the user for the require
 sphinx-quistart
 ```
 
-3. Modify the ["conf.py"](https://github.com/IlMusu/Research_Track/blob/assignment_3/sphinx/source/conf.py) file just created by adding the correct path so that Sphinx is able to find the source code.<br>
+3. Modify the ["conf.py"](https://github.com/IlMusu/Research_Track/blob/assignment_3/sphinx/source/conf.py) file just created by adding the path (line 13-15) so that Sphinx is able to find the sources.<br>
 (OPTIONAL) Some extensions may be added to customize Sphinx.
 
 4. Modify the ["index.rst"](https://github.com/IlMusu/Research_Track/blob/assignment_3/sphinx/source/index.rst) file by adding the scripts for which we want to provide the documentation.
