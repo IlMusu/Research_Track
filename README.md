@@ -92,7 +92,7 @@ In this context:
 
 Given the fact that there there are only 30 samples for each robot and that we are considering two robots, the statiscs that has been used to evalute the performance of the robots is the **Two Sample T-Test**.<br>
 Given the fact that the alternative hypothesis HA has been formulated as one of the two robots being superior to the other, we have need to consider only one of the two tails of the T-Test.<br>
-At the end, the statistics that need to be used is the **One-Tailed Two Sample T-Test**.
+At the end, the statistics that needs to be used is the **One-Tailed Two Sample T-Test**.
 
 NB. It is also possible to formulate the hypothesis HA as the following:
 ```
