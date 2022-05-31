@@ -75,6 +75,10 @@ The third part of this assignment is to perform a statistical analysis on the [f
 As performace evaluators, the **average time required to finish the circuit** has been considered.<br>
 NB. The simulation has been run 30 times for each implementaion.<br>
 
+As said, two implementations of the same algorithm have been compared:
+- The implementation of [this repository](https://github.com/CarmineD8/python_simulator/tree/rt2), referred to as "Robot1".
+- The implementation of [first assignment](https://github.com/IlMusu/Research_Track/tree/assignment_1/), reffered to as "Robot2".
+
 Before starting to collect the data, it is necessary to formulate the hypotesis:
 ```
 With a confidence level of 5%, I formulate the following hypothesis:
