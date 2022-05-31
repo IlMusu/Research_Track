@@ -94,6 +94,10 @@ Given the fact that there there are only 30 samples for each robot and that we a
 Given the fact that the alternative hypothesis HA has been formulated as one of the two robots being superior to the other, we have need to consider only one of the two tails of the T-Test.<br>
 At the end, the statistics that need to be used is the **One-Tailed Two Sample T-Test**.
 
+NB. It is also possible to formulate HA as the following:<br>
+HA : the mean time of Robot1 is different that the mean time of Robot2.<br>
+In this case we are not explicitly stating that one of the two robots is superior to the other, so we must consider both the tails of the T-Test. This is called Two-Tailed T-Test.
+
 ## Running
 Inside the folder of this repository, run the following command:
 ```bash
