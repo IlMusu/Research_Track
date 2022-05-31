@@ -63,11 +63,11 @@ roslaunch final_assignment move_base.launch
 ```
 
 Now, it is possible to open Jupyter Notebook to visualized the interface.<br>
-Inside the folder of this repository, run the following command:
+Downlod the folder of this repository and inside of it run the following command:
 ```bash
 jupyter notebook
 ```
-And open the file called "RobotControllerUI".<br>
+Finally, open the file called "RobotControllerUI".<br>
 NB. This notebook also contains some graphs of some parameters and statistics regarding the robot performance in scanning the environmnet and reaching targets.
 
 # PART 3 : Statistics
