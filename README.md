@@ -20,7 +20,8 @@ sphinx-quistart
 ```
 
 3. Modify the ["conf.py"](https://github.com/IlMusu/Research_Track/blob/assignment_3/sphinx/source/conf.py) file just created by adding the path (line 13-15) so that Sphinx is able to find the sources.<br>
-(OPTIONAL) Some extensions may be added to customize Sphinx.
+(OPTIONAL) Some extensions (line 33) may be added to customize Sphinx.
+(OPTIONAL) It is possible to change the html theme (line 64).
 
 4. Modify the ["index.rst"](https://github.com/IlMusu/Research_Track/blob/assignment_3/sphinx/source/index.rst) file by adding the scripts for which we want to provide the documentation.
 
