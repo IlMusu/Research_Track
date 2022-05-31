@@ -91,7 +91,8 @@ In this context:
 - The **confidence level of 5%** implies that H0 will be rejected when the sampling result has a less than 5% (in our case) of probability of occurring if H0 is true.
 
 Given the fact that there there are only 30 samples for each robot and that we are considering two robots, the statiscs that has been used to evalute the performance of the robots is the **Two Sample T-Test**.<br>
-Given the fact that the alternative hypothesis HA has been formulated as one of the two means being superior to the other, we have need to consider only the tail on the right of the t-test. At the end, the statistics that need to be used is the **One-Tailed Two Sample T-Test**.
+Given the fact that the alternative hypothesis HA has been formulated as one of the two robots being superior to the other, we have need to consider only one of the two tails of the T-Test.<br>
+At the end, the statistics that need to be used is the **One-Tailed Two Sample T-Test**.
 
 ## Running
 Inside the folder of this repository, run the following command:
